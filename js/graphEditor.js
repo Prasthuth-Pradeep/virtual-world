@@ -8,6 +8,7 @@ class GraphEditor {
         this.selected = null;
         this.hovered = null;
         this.dragging = false;
+        this.mouse = null;
 
         this.#addEventListeners();
     }
@@ -22,25 +23,24 @@ class GraphEditor {
                 }
             }
             if (evt.button == 0) { // left click
-                const mouse = new Point(evt.offsetX, evt.offsetY);
                 if (this.hovered) {
                     this.#select(this.hovered);
                     this.dragging = true;
                     return;
                 }
 
-                this.graph.addPoint(mouse);
-                this.#select(mouse);
-                this.hovered = mouse;
+                this.graph.addPoint(this.mouse);
+                this.#select(this.mouse);
+                this.hovered = this.mouse;
             }
         })
 
         this.canvas.addEventListener("mousemove", (evt) => {
-            const mouse = new Point(evt.offsetX, evt.offsetY);
-            this.hovered = getNearestPoint(mouse, this.graph.points, 10);
+            this.mouse = new Point(evt.offsetX, evt.offsetY);
+            this.hovered = getNearestPoint(this.mouse, this.graph.points, 10);
             if (this.dragging == true) {
-                this.selected.x = mouse.x;
-                this.selected.y = mouse.y;
+                this.selected.x = this.mouse.x;
+                this.selected.y = this.mouse.y;
             }
         })
 
@@ -75,6 +75,8 @@ class GraphEditor {
             this.hovered.draw(this.ctx, { fill: true });
         }
         if (this.selected) {
+            const intent = this.hovered ? this.hovered : this.mouse;
+            new Segment(this.selected, intent).draw(ctx);
             this.selected.draw(this.ctx, { outline: true });
         }
     }
