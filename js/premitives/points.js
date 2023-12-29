@@ -11,7 +11,7 @@ class Point {
 
     /* Setting draw method on the given context and two more parameters for styling.
     Size of 18px and color of black */
-    draw(ctx, {size = 18, color = "black", outline = false} = {}){
+    draw(ctx, {size = 18, color = "black", outline = false, fill = false} = {}){
         /*  Drawing the points as circles.
             Circles need radious
         */
@@ -30,6 +30,12 @@ class Point {
         ctx.strokeStyle = "yellow";
         ctx.arc(this.x, this.y, radious * 0.6, 0 ,Math.PI * 2);
         ctx.stroke();
+       }
+       if(fill){
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, radious * 0.4, 0 ,Math.PI * 2);
+        ctx.fillStyle = "yellow";
+        ctx.fill();
        }
     }
 }
