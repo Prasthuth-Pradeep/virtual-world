@@ -14,35 +14,9 @@ class GraphEditor {
     }
 
     #addEventListeners() {
-        this.canvas.addEventListener("mousedown", (evt) => {
-            if (evt.button == 2) { // right click
-                if (this.selected) {
-                    this.selected = null;
-                } else if (this.hovered) {
-                    this.#removePoint(this.hovered);
-                }
-            }
-            if (evt.button == 0) { // left click
-                if (this.hovered) {
-                    this.#select(this.hovered);
-                    this.dragging = true;
-                    return;
-                }
+        this.canvas.addEventListener("mousedown", this.#handleMouseDown.bind(this));
 
-                this.graph.addPoint(this.mouse);
-                this.#select(this.mouse);
-                this.hovered = this.mouse;
-            }
-        })
-
-        this.canvas.addEventListener("mousemove", (evt) => {
-            this.mouse = new Point(evt.offsetX, evt.offsetY);
-            this.hovered = getNearestPoint(this.mouse, this.graph.points, 10);
-            if (this.dragging == true) {
-                this.selected.x = this.mouse.x;
-                this.selected.y = this.mouse.y;
-            }
-        })
+        this.canvas.addEventListener("mousemove", this.#handleMouseMove.bind(this));
 
         // To hide right clicl options
         this.canvas.addEventListener("contextmenu", (evt) => {
@@ -52,6 +26,35 @@ class GraphEditor {
         this.canvas.addEventListener("mouseup", () => {
             this.dragging = false
         })
+    }
+
+    #handleMouseMove(evt){
+        this.mouse = new Point(evt.offsetX, evt.offsetY);
+        this.hovered = getNearestPoint(this.mouse, this.graph.points, 10);
+        if (this.dragging == true) {
+            this.selected.x = this.mouse.x;
+            this.selected.y = this.mouse.y;
+        }
+    }
+
+    #handleMouseDown(evt) {
+        if (evt.button == 2) { // right click
+            if (this.selected) {
+                this.selected = null;
+            } else if (this.hovered) {
+                this.#removePoint(this.hovered);
+            }
+        }
+        if (evt.button == 0) { // left click
+            if (this.hovered) {
+                this.#select(this.hovered);
+                this.dragging = true;
+                return;
+            }
+            this.graph.addPoint(this.mouse);
+            this.#select(this.mouse);
+            this.hovered = this.mouse;
+        }
     }
 
     #select(point) {
