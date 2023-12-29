@@ -30,7 +30,6 @@ class Graph {
     getSegmentWithPoint(point) {
         const segs = [];
         for (const seg of this.segments) {
-            console.log(seg)
             if (Object.values(seg).includes(point)) {
                 segs.push(seg);
             }
