@@ -34,17 +34,19 @@ class GraphEditor {
             const mouse = new Point(evt.offsetX, evt.offsetY);
             this.hovered = getNearestPoint(mouse, this.graph.points, 10);
         })
-        
+
         // To hide right clicl options
         this.canvas.addEventListener("contextmenu", (evt) => {
             evt.preventDefault();
         })
     }
 
-    #removePoint(point){
+    #removePoint(point) {
         this.graph.removePoint(point)
         this.hovered = null;
-        this.selected = null;
+        if (this.selected == point) {
+            this.selected = null;
+        }
     }
 
     display() {
