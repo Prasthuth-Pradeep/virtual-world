@@ -27,6 +27,7 @@ class GraphEditor {
 
                 this.graph.addPoint(mouse);
                 this.selected = mouse;
+                this.hovered = mouse;
             }
         })
 
